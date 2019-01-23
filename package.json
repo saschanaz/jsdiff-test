@@ -4,14 +4,15 @@
   "main": "index.js",
   "scripts": {
     "test": "node index.js",
-    "clean": "rm -rf files"
+    "clean": "rimraf files"
   },
   "license": "ISC",
   "author": "Kagami Sascha Rosylight <saschanaz@outlook.com>",
   "description": "",
   "dependencies": {
     "diff": "^4.0.1",
-    "node-fetch": "^2.3.0"
+    "node-fetch": "^2.3.0",
+    "rimraf": "^2.6.3"
   },
   "private": true
 }

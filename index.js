@@ -51,9 +51,9 @@ async function getFile({local, remote}) {
  * @return {Promise<void>}
  */
 function jsDiff(patchContent, files) {
-  return new Promise(function (resolve, reject) {
+  return new Promise((resolve, reject) => {
     diff.applyPatches(patchContent, {
-      loadFile: function (index, callback) {
+      loadFile(index, callback) {
         try {
           const fileName = stripFirstSlash(index.oldFileName);
           if (fileName in files) {
@@ -65,7 +65,7 @@ function jsDiff(patchContent, files) {
           callback(err);
         }
       },
-      patched: function (index, content, callback) {
+      patched(index, content, callback) {
         try {
           if (content === false) {
             throw new Error('Found a mismatching patch');
@@ -81,13 +81,19 @@ function jsDiff(patchContent, files) {
           callback(err);
         }
       },
-      complete: function (error) {
+      complete(error) {
         if (error) {
           reject(error);
         } else {
           resolve();
         }
       },
+      compareLine(_, line, operation, patchContent) {
+        if (operation === ' ') {
+          return true;
+        }
+        return line === patchContent;
+      }
     });
   });
 }
