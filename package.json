@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js"
+    "test": "node index.js",
+    "clean": "rm -rf files"
   },
   "license": "ISC",
   "author": "Kagami Sascha Rosylight <saschanaz@outlook.com>",

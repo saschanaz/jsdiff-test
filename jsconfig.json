@@ -3,5 +3,8 @@
     "target": "es2018",
     "checkJs": true,
     "strict": true
-  }
+  },
+  "files": [
+    "index.js"
+  ]
 }

@@ -4,20 +4,46 @@ const fs = require("fs");
 const fetch = require("node-fetch").default;
 const diff = require("diff");
 
-const patch = "https://s3.amazonaws.com/snyk-rules-pre-repository/snapshots/master/patches/npm/qs/20140806-1/qs_20140806-1_0_0_snyk.patch";
-const target = "https://unpkg.com/qs@0.6.6/index.js";
+const patch = {
+  local: "files/qs_20140806-1_0_0_snyk.patch",
+  remote: "https://s3.amazonaws.com/snyk-rules-pre-repository/snapshots/master/patches/npm/qs/20140806-1/qs_20140806-1_0_0_snyk.patch"
+};
+const target = {
+  local: "files/index.js",
+  remote: "https://unpkg.com/qs@0.6.6/index.js"
+};
 
 (async () => {
+  try {
+    fs.mkdirSync("files");
+  } catch {}
+
   const [patchFile, targetFile] = await Promise.all(
-    [patch, target].map(url => fetch(url).then(res => res.text()))
+    [patch, target].map(getFile)
   );
-  await jsDiff(patchFile, { 
+
+  await jsDiff(patchFile, {
     "index.js": targetFile
   });
 })().catch(err => {
   console.error(err);
   process.exit(1);
 });
+
+/**
+ * @param {object} file 
+ * @param {string} file.local
+ * @param {string} file.remote
+ */
+async function getFile({local, remote}) {
+  try {
+    return fs.readFileSync(local, 'utf-8');
+  } catch {
+    const content = await (await fetch(remote)).text();
+    fs.writeFileSync(local, content);
+    return content;
+  }
+}
 
 /**
  * @param {string} patchContent,
