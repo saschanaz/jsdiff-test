@@ -5,11 +5,14 @@ const fetch = require("node-fetch").default;
 const diff = require("diff");
 
 const patch = "https://s3.amazonaws.com/snyk-rules-pre-repository/snapshots/master/patches/npm/qs/20140806-1/qs_20140806-1_0_0_snyk.patch";
+const target = "https://unpkg.com/qs@0.6.6/index.js";
 
 (async () => {
-  const patchFile = await (await fetch(patch)).text();
+  const [patchFile, targetFile] = await Promise.all(
+    [patch, target].map(url => fetch(url).then(res => res.text()))
+  );
   await jsDiff(patchFile, { 
-    "index.js": fs.readFileSync(path.resolve(__dirname, "node_modules/qs/index.js"), "utf8")
+    "index.js": targetFile
   });
 })().catch(err => {
   console.error(err);
