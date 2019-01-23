@@ -11,7 +11,10 @@ const patch = "https://s3.amazonaws.com/snyk-rules-pre-repository/snapshots/mast
   await jsDiff(patchFile, { 
     "index.js": fs.readFileSync(path.resolve(__dirname, "node_modules/qs/index.js"), "utf8")
   });
-})();
+})().catch(err => {
+  console.error(err);
+  process.exit(1);
+});
 
 /**
  * @param {string} patchContent,
