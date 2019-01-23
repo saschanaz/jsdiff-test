@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/saschanaz/jsdiff-test.svg?branch=master)](https://travis-ci.org/saschanaz/jsdiff-test)
+
 This repository contains a repro for an issue that jsdiff fails when GNU patch succeeds.
 
 It uses a patch from Snyk for an old package [`qs@0.6.6`](https://www.npmjs.com/package/qs/v/0.6.6).
